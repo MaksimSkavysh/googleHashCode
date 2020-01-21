@@ -28,14 +28,14 @@ const tryInsertServer = ({ row, slot }, { slots, id }, fields) => {
   return true
 }
 
-const f = [
-  [null, null, null],
-  [null, null, 1],
-  [null, null, null],
-]
-const res = tryInsertServer({ row: 1, slot: 0 }, { slots: 2, id: 2 }, f)
-debugger
-console.log(res, f)
+// const f = [
+//   [null, null, null],
+//   [null, null, 1],
+//   [null, null, null],
+// ]
+// const res = tryInsertServer({ row: 1, slot: 0 }, { slots: 2, id: 2 }, f)
+// debugger
+// console.log(res, f)
 
 const main = () => {
   const raw = readFile('./dc.in')
@@ -53,7 +53,7 @@ const main = () => {
   }, {})
   const serversBySlots = R.map(sortByCapacity, R.groupBy(R.prop('slots'), servers))
 
-  const field = R.range(0, rowsCount).map(() => new Array(slotsCount).map(i => undefined))
+  const field = R.range(0, rowsCount).map(() => (new Array(slotsCount)).fill(null))
   unavailableSlots.forEach(({ row, slot }) => (field[row][slot] = 'x'))
 
   debugger
