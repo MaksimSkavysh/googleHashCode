@@ -30,7 +30,7 @@ const greedyPlaceToPool = (pools, server, serverMap) => {
   let index = 0
   pools.forEach((l, i) => {
     const s = R.sum(l.map(R.prop('capacity')))
-    if (s < v) {
+    if (s <= v) {
       index = i
       v = s
     }
@@ -61,7 +61,31 @@ const tryInsertServer = ({ row, slot }, server, field) => {
     field[row][slotIndex] = id
   })
   server.place = [row, slot]
-  return slots
+  return true
+}
+
+const tryInsertServerInRow = ({ row, server, field, slotsCount }) => {
+  let inserted = false
+  for (let slot = 0; slot < slotsCount; slot++) {
+    if (tryInsertServer({ row, slot }, server, field)) {
+      inserted = true
+      break
+    }
+  }
+  return inserted
+}
+
+const rowsByCapacity = (field, rowsCount, serversByIdMap) => {
+  const rows = R.range(0, rowsCount)
+    .map((acc, row) => {
+      const sum = R.uniq(field[row])
+        .filter(item => typeof item === 'number')
+        .map(id => serversByIdMap[id].capacity)
+        .reduce(R.add, 0)
+      return { row, sum }
+    })
+  const sorted = rows.sort((a, b) => a.sum - b.sum + 1)
+  return R.map(R.prop('row'), sorted)
 }
 
 const main = () => {
@@ -70,15 +94,12 @@ const main = () => {
     acc[s.id] = s
     return acc
   }, {})
-  const serversBySlots = R.map(sortByCapacity, R.groupBy(R.prop('slots'), servers))
 
-  const data = {}
   for (let server of servers) {
-    data[server.id] = []
-    let currentPlace = { row: 0, slot: 0 }
-    for (let slot = 0; slot < slotsCount; slot++) {
-      for (let row = 0; row < rowsCount; row++) {
-        tryInsertServer({ row, slot }, server, field)
+    const rows = rowsByCapacity(field, rowsCount, serversByIdMap)
+    for (let row of rows) {
+      if (tryInsertServerInRow({ row, server, field, slotsCount })) {
+        break
       }
     }
   }
@@ -87,7 +108,9 @@ const main = () => {
   usedServers.forEach(server => greedyPlaceToPool(pools, server))
   const rowsSum = R.range(0, rowsCount).map(excludedRow => {
     const a = pools.map((pool) => {
-      return pool.filter(({ place: [row] }) => row !== excludedRow).map(R.prop('capacity')).reduce((acc, v) => acc + v)
+      return pool.filter(({ place: [row] }) => row !== excludedRow)
+        .map(R.prop('capacity'))
+        .reduce(R.add)
     })
     return Math.min(...a)
   })
