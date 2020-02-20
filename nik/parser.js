@@ -22,6 +22,7 @@ const parseInput = filename => {
     const [booksCount, signup, parallel] = ril()
     const bookIds = ril()
     libs.push({
+      id: i,
       booksCount,
       signup,
       parallel,
@@ -38,8 +39,6 @@ const parseInput = filename => {
   console.log(res)
   return res
 }
-
-console.log(parseInput('a_example'))
 
 module.exports = {
   parseInput,
