@@ -36,11 +36,11 @@ const parseInput = filename => {
     days,
     libs,
   }
-  console.log(res)
+  // console.log(res)
   return res
 }
 
-console.log(parseInput('b_read_on'))
+// console.log(parseInput('b_read_on'))
 
 module.exports = {
   parseInput,
