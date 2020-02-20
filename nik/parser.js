@@ -13,87 +13,34 @@ const createReader = filename => {
 
 
 const parseInput = filename => {
-  const ril = createReader(filename)
-  const [rows, cols, dronesCount, turns, payload] = ril()
-  const [productTypeCount] = ril()
-  const productWeights = ril()
-  const [warehouseCount] = ril()
+  const ril = createReader('../' + filename + '.txt')
+  const [bookCount, libCount, days] = ril()
+  const bookScore = ril()
 
-  const emptyPack = () => _.range(0, productTypeCount).reduce((a, i) =>{
-    a[i] = 0;
-    return a
-  }, {})
-
-  const warehouses = []
-  for (let i = 0; i < warehouseCount; i++) {
-    const pos = ril()
-    const pack = ril().reduce((acc, p) => {
-      acc[p]++
-      return acc
-    }, emptyPack())
-    warehouses.push({
-      id: i,
-      pos,
-      pack,
+  const libs = []
+  for(let i = 0; i < libCount; ++i) {
+    const [booksCount, signup, parallel] = ril()
+    const bookIds = ril()
+    libs.push({
+      booksCount,
+      signup,
+      parallel,
+      bookIds
     })
   }
-
-  const startDronePos = warehouses[0].pos
-  const drones = _.range(0, dronesCount).map(index => ({
-    id: index,
-    freeTime: 0,
-    pack: emptyPack(),
-    payload: payload,
-    pos: [...startDronePos],
-  }));
-
-  const orders = []
-  const [ordersCount] = ril()
-  for (let i = 0; i < ordersCount; i++) {
-    const pos = ril()
-
-    ril()
-
-    const pack = ril().reduce((acc, p) => {
-      acc[p]++
-      return acc
-    }, emptyPack())
-
-    orders.push({
-      id: i,
-      pos,
-      pack,
-    })
+  const res = {
+    bookCount,
+    libCount,
+    bookScore,
+    days,
+    libs,
   }
-
-  return {
-    rows,
-    dronesCount,
-    cols,
-    turns,
-    payload,
-    productTypeCount,
-    productWeights,
-    warehouses,
-    orders,
-    drones,
-  }
+  console.log(res)
+  return res
 }
 
-const parseOutput = (filename) => {
-  const ril = createReader(filename)
-  const commandsCount = ril()
-  const commands = []
-  for (let i = 0; i < commandsCount; i++) {
-    commands.push(ril())
-  }
-  return commands
-}
-
-console.log(parseInput('./qualification_round_2016.in/example.in'))
-console.log(parseOutput('./out/example.out'))
+console.log(parseInput('a_example'))
 
 module.exports = {
   parseInput,
-  parseOutput,
 }
