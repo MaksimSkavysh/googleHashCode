@@ -1,0 +1,29 @@
+*.log
+.env
+
+# NodeJS
+node_modules
+
+# coverage
+.nyc_output
+coverage
+
+# WebStorm
+.idea/
+
+#VSCODE
+.vscode
+
+# macOS
+.DS_STORE
+
+# project
+/dist
+/dist-PlanCreator
+/dist-PlanCreatorTP
+src/api/client/mocks/data.json
+integration_test_report
+tests/integration/results/
+liveRegression/bundle
+liveRegression/result
+/testReports
