@@ -83,10 +83,10 @@ const rowsByCapacity = (field, rowsCount, serversByIdMap) => {
         .map(id => serversByIdMap[id].capacity)
         .reduce(R.add, 0)
       return { row, sum }
-    })
+    });
   const sorted = rows.sort((a, b) => a.sum - b.sum + 1)
   return R.map(R.prop('row'), sorted)
-}
+};
 
 const main = () => {
   const { field, rowsCount, slotsCount, pools, servers } = readData()
