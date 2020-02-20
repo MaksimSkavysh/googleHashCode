@@ -40,6 +40,25 @@ const parseInput = filename => {
   return res
 }
 
+console.log(parseInput('b_read_on'))
+
 module.exports = {
   parseInput,
+}
+
+const getFilterBooks = (booksToFilter, allBooksIds) => {
+  const filtered = {}
+  allBooksIds.forEach(bookId => {
+    if (!booksToFilter.includes(bookId)) {
+      filtered[bookId] = true
+    }
+  })
+  return Object.keys(filtered)
+};
+
+const filterWithStructure = (booksToFilter, data) => {
+  for (let i = 0; i < data.length; i++) {
+    data[i].bookIds = getFilterBooks(booksToFilter, data[i].bookIds);
+  }
+  return data
 }
