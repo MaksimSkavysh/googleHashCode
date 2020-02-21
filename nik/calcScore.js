@@ -5,16 +5,7 @@ const INPUTS = ['a_example', 'b_read_on', 'c_incunabula', 'd_tough_choices', 'e_
 
 
 
-const calcScore = (filename) => {
-  let data
-  let out
-  try {
-
-    data = parseInput(filename)
-    out = parseOutput(filename, 'out2')
-  } catch(err) {
-    return 'no file'
-  }
+const calcScore = (data, out) => {
   let score = 0
   let ts = data.days
   while (ts && out.length) {
@@ -31,7 +22,27 @@ const calcScore = (filename) => {
       score += data.bookScore[bookId]
     }
   }
-  console.log(filename, score)
+  return score
 }
 
-INPUTS.forEach(calcScore)
+const calcFileScore = (filename) => {
+  let data
+  let out
+  try {
+
+    data = parseInput(filename)
+    out = parseOutput(filename, 'out3')
+  } catch (err) {
+    return 'no file'
+  }
+  const socre = calcScore(data, out)
+
+  console.log(filename, socre)
+}
+
+// INPUTS.forEach(calcFileScore)
+
+module.exports = {
+  calcScore,
+  check: () => INPUTS.forEach(calcFileScore)
+}

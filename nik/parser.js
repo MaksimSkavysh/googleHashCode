@@ -55,6 +55,7 @@ const parseOutput = (filename, folder) => {
   return libs
 }
 
+
 // console.log(parseInput('b_read_on'))
 
 module.exports = {

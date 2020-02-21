@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const fs = require('fs');
 const { parseInput } = require('./parser.js')
+const { calcScore, check } = require('./calcScore.js')
 const store = require('./store.js')
 
 const INPUTS = ['a_example', 'b_read_on', 'c_incunabula', 'd_tough_choices', 'e_so_many_books', 'f_libraries_of_the_world']
@@ -74,6 +75,9 @@ const fitBook = (data, avalLibs) => {
   let maxScore = 0
 
   for(const lib of avalLibs) {
+    if (!lib.free) {
+      continue
+    }
     if (!data.bookScore2[lib.bookIds[0]] && lib.bookIds.length) {
       lib.bookIds.shift()
     }
@@ -90,16 +94,10 @@ const fitBook = (data, avalLibs) => {
 }
 
 
-const calcScore = (data, libs) => {
-  for (let time = 0; time < data.days; time++) {
-    
-  }
-}
-
-
 const solve = (inputName) => {
   const filename = inputName
   const data = parseInput(filename)
+  const dataCopy = parseInput(filename)
   data.bookScore2 = data.bookScore.slice()
   calcBookIndex(data)
   const result = []
@@ -124,14 +122,16 @@ const solve = (inputName) => {
     maxLib.lib.avalTs = data.days - ts
     maxLib.lib.signupTmp = maxLib.lib.signup
     maxLib.lib.order = []
-    maxLib.lib.bookIds.sort((a, b) => data.bookScore2[b] - data.bookScore2[a])
+    maxLib.lib.bookIds.sort((a, b) => data.bookScore2[b]/data.bookIndex[b] - data.bookScore2[a]/data.bookIndex[a])
 
     maxLib.lib.signup = ts + 10000000
     sortedLibs.push(maxLib.lib)
   } while(ts > 0)
 
   for (let time = 0; time < data.days; time++) {
-    // console.log('f', time)
+    if(!(time%1000)) {
+      // console.log(time)
+    }
     const avalLib = sortedLibs.filter(lib => (lib.avalTs <= time) && lib.bookIds.length)
     avalLib.forEach(lib => {
       lib.free = lib.parallel
@@ -139,16 +139,16 @@ const solve = (inputName) => {
       // lib.bookIds.sort((a, b) => data.bookScore2[b]*data.bookIndex[b] - data.bookScore2[a]*data.bookIndex[a])
     })
 
-    calcBookIndex(data)
+    // calcBookIndex(data)
 
     while (avalLib.some(lib => lib.free && lib.bookIds.length)) {
       //console.log('w')
       // console.log('booksToAdd', time, booksToAdd, totalScore)
       const { lib, score } = fitBook(data, avalLib)
-      let bookId
       if (!lib) {
-        continue
+        break
       }
+      let bookId
       bookId = lib.bookIds.shift()
 
       if (!lib.bookIds.length) {
@@ -157,10 +157,12 @@ const solve = (inputName) => {
       }
       lib.free--
       lib.order.push(bookId)
+      totalScore += data.bookScore2[bookId]
       data.bookScore2[bookId] = 0
-      totalScore += score
        // console.log('booksToAdd', time, totalScore)
     }
+    // const ss = calcScore(dataCopy, sortedLibs.map(lib => ({ id: lib.id,  bookIds: lib.order })))
+    // console.log({ totalScore, ss })
 
   }
 
@@ -174,8 +176,10 @@ const solve = (inputName) => {
 
 
 // INPUTS.forEach(name => solve(name))
-INPUTS_FASR.forEach(name => solve(name))
+// INPUTS_FASR.forEach(name => solve(name))
+check()
 
-// solve(INPUTS[4])
+solve(INPUTS[2])
+check()
 
 
