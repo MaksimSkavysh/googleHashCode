@@ -40,10 +40,26 @@ const parseInput = filename => {
   return res
 }
 
+const parseOutput = (filename, folder) => {
+  const ril = createReader('../' + folder +'/'+ filename + '.txt')
+  const [count] = ril()
+  const libs = []
+  for (let i = 0; i < count; i++) {
+    const [id] = ril()
+    const bookIds = ril()
+    libs.push({
+      id,
+      bookIds,
+    })
+  }
+  return libs
+}
+
 // console.log(parseInput('b_read_on'))
 
 module.exports = {
   parseInput,
+  parseOutput,
 }
 
 const getFilterBooks = (booksToFilter, allBooksIds) => {

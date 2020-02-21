@@ -28,7 +28,7 @@ const fitLib = (data, lib, ts) => {
     const bookId = lib.bookIds[i]
     uniqs += data.bookIndex[i]
     score += data.bookScore[bookId]
-    fit += data.bookScore[bookId] * data.bookIndex[i]
+    fit += data.bookScore[bookId]
     usedIds.push(bookId)
   }
   // console.log(fit)
@@ -90,6 +90,13 @@ const fitBook = (data, avalLibs) => {
 }
 
 
+const calcScore = (data, libs) => {
+  for (let time = 0; time < data.days; time++) {
+    
+  }
+}
+
+
 const solve = (inputName) => {
   const filename = inputName
   const data = parseInput(filename)
@@ -125,7 +132,7 @@ const solve = (inputName) => {
 
   for (let time = 0; time < data.days; time++) {
     // console.log('f', time)
-    const avalLib = sortedLibs.filter(lib => lib.avalTs >= time && lib.bookIds.length)
+    const avalLib = sortedLibs.filter(lib => (lib.avalTs <= time) && lib.bookIds.length)
     avalLib.forEach(lib => {
       lib.free = lib.parallel
 
@@ -139,6 +146,9 @@ const solve = (inputName) => {
       // console.log('booksToAdd', time, booksToAdd, totalScore)
       const { lib, score } = fitBook(data, avalLib)
       let bookId
+      if (!lib) {
+        continue
+      }
       bookId = lib.bookIds.shift()
 
       if (!lib.bookIds.length) {
