@@ -49,6 +49,23 @@ const parseInput = filename => {
 
 }
 
+
+
+const write = (name, shedule) => {
+  const res = [shedule.length]
+  for (let i = 0; i < shedule.length; i++) {
+    res.push(i)
+    res.push(Object.keys(shedule[i].inStreets).length)
+    for (const street in shedule[i].inStreets) {
+      res.push(`${street} ${shedule[i].inStreets[street]}`)
+    }
+
+  }
+  fs.writeFileSync('./out/' + name + '.txt', res.join('\n'))
+}
+
+
+
 const parseOutput = (filename) => {
   const ril = createReader('./inputs/' + filename + '.txt')
   const [intersections] = ril()
@@ -67,7 +84,8 @@ const parseOutput = (filename) => {
 }
 
 module.exports = {
-  parseInput
+  parseInput,
+  write,
 }
 
 const test = () => {
