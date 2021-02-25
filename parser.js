@@ -54,10 +54,15 @@ const parseInput = filename => {
 const write = (name, shedule) => {
   const res = [shedule.length]
   for (let i = 0; i < shedule.length; i++) {
+    if (!Object.keys(shedule[i].inStreets).length){
+      console.log('no')
+      continue
+    }
     res.push(i)
     res.push(Object.keys(shedule[i].inStreets).length)
     for (const street in shedule[i].inStreets) {
-      res.push(`${street} ${shedule[i].inStreets[street]}`)
+      if (shedule[i].inStreets[street])
+        res.push(`${street} ${shedule[i].inStreets[street]}`)
     }
 
   }

@@ -42,6 +42,7 @@ const start = (input, schedule) => {
   const scheduleByTimeGen = openStreetByTime(input, schedule)
 
   const TICK = (t) => {
+    // console.time('move')
     console.log(t)
     for (const street in city) {
       const toQueue = city[street].rode.pop()
@@ -50,8 +51,14 @@ const start = (input, schedule) => {
       }
       city[street].rode.unshift()
     }
+
+    // console.timeEnd('move')
+    // console.time('scheduleByTimeGen')
     const scheduleByTime = scheduleByTimeGen.next().value
-    console.log(scheduleByTime)
+    // console.timeEnd('scheduleByTimeGen')
+
+    // console.time('cross')
+    // console.log(scheduleByTime)
     for (const inter in scheduleByTime) {
       const greenStreet = scheduleByTime[inter]
       const carId = city[greenStreet].queue.pop()
@@ -65,13 +72,15 @@ const start = (input, schedule) => {
       }
     }
 
+    // console.timeEnd('cross')
+
   }
 
   for (let i = 0; i < TIME; i++) {
     TICK(i)
   }
 
-  console.log(score)
+  console.log('Score', score)
 
 
   // console.log('scheduleByTime', scheduleByTime)
@@ -86,4 +95,4 @@ const test = (TEST = 'a') => {
   // const s
 }
 
-test('a')
+test('c')

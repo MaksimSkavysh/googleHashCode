@@ -29,13 +29,13 @@ const run = (TASK = 'a') => {
 
   const data = parseInput(TASK)
 
-  const out = parseOutput(TASK)
+  // const out = parseOutput(TASK)
   const intersections = Array(data.intersections)
   for (let i = 0; i < data.intersections; i++) {
     intersections[i] = {
       cars: [],
       inStreets: {},
-      schedule: out[i]
+      // schedule: out[i]
     }
   }
 
@@ -45,21 +45,46 @@ const run = (TASK = 'a') => {
     const ii = data.streetsMap[startStreet].from
     intersections[ii].cars.push(carId)
   }
+  const streetsMap = {}
 
   for (const street of data.streets) {
-    intersections[street.to].inStreets[street.name] = 1
+    intersections[street.to].inStreets[street.name] = -1
   }
+  for (const path of data.cars) {
+    for (const pathElement of path) {
+      if(!streetsMap[pathElement]) {
+        streetsMap[pathElement] = 0
+      }
+      streetsMap[pathElement]++
+    }
+  }
+
+  console.log(streetsMap)
+
+  const entrArr = Object.entries(streetsMap).sort((a, b) => a[1] - b[1])
+  const max = Math.max(...entrArr.map(a => a[1]))
+  const entrMap = entrArr.reduce((acc, item, index, arr) => {
+    acc[item[0]] = Math.round(item[1]/max * 4) + 1
+    return acc
+  }, {})
+  // console.log(entrMap)
 
 
   for (let i = 0; i < intersections.length; i++) {
-    intersections[i].current = 0
-    intersections[i].time = intersections[i].schedule[0][1]
+    for (const street in intersections[i].inStreets) {
+      intersections[i].inStreets[street] = entrMap[street]
+      // console.log('intersections', intersections)
+      if (entrMap[street] == undefined)
+        // delete intersections[i].inStreets[street]
+        intersections[i].inStreets[street] = 1
+      // console.log(intersections[i].inStreets[street])
+    }
   }
-  console.log(data)
-  console.log(intersections)
-  // console.log(out)
+  // console.log(data)
+  // console.log(intersections)
+  // // console.log(out)
 
-  simulate(data, inter)
+  // simulate(data, inter)
 
   write(TASK, intersections)
 }
@@ -70,10 +95,10 @@ const run = (TASK = 'a') => {
 const TASKS = ['a', 'b', 'c', 'd', 'e', 'f']
 
 
-run()
+// run('b')
 
-// for (const task of TASKS) {
-//
-//   run(task)
-//
-// }
+for (const task of TASKS) {
+
+  run(task)
+
+}
