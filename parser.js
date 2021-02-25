@@ -25,6 +25,10 @@ const parseInput = filename => {
       time,
     })
   }
+  const streetsMap = streets.reduce((acc, street) => {
+    acc[street.name] = street
+    return acc
+  }, {})
   const cars = []
 
   for (let i = 0; i < CARS_COUNT; i++) {
@@ -37,11 +41,16 @@ const parseInput = filename => {
     TIME,
     intersections,
     streets,
+    streetsMap,
     cars,
     points,
   }
   return res
 
+}
+
+module.exports = {
+  parseInput
 }
 
 console.log(parseInput('a'))
