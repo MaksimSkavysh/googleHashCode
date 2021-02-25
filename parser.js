@@ -49,8 +49,33 @@ const parseInput = filename => {
 
 }
 
+const parseOutput = (filename) => {
+  const ril = createReader('./inputs/' + filename + '.txt')
+  const [intersections] = ril()
+  const schedule = {}
+  for (let i = 0; i < intersections; i++) {
+    const [id] = ril()
+    const [streetsCount] = ril()
+    const scheduleList = []
+    for (let j = 0; j < streetsCount; j++) {
+      const [name, timing] = ril()
+      scheduleList.push([name, timing])
+    }
+    schedule[id] = scheduleList
+  }
+  return schedule
+}
+
 module.exports = {
   parseInput
 }
 
-console.log(parseInput('a'))
+const test = () => {
+  const input = parseInput('a')
+  const { T } = input
+  console.log(input)
+  const out = parseOutput('out_example');
+  console.log('out', out)
+}
+
+test()
