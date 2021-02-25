@@ -2,7 +2,6 @@ const { parseInput, parseOutput } = require('./parser')
 
 const openStreetByTime = function * (input, schedule) {
   const { TIME, streets } = input
-  const scheduleByTime = []
   // const s
   const entries = Object.entries(schedule)
   for (let i = 0; i < TIME; i++) {
@@ -21,7 +20,6 @@ const openStreetByTime = function * (input, schedule) {
     yield obj
     // scheduleByTime.push(obj)
   }
-  return scheduleByTime
 }
 
 const start = (input, schedule) => {
@@ -52,9 +50,10 @@ const start = (input, schedule) => {
       }
       city[street].rode.unshift()
     }
-    const scheduleByTime = scheduleByTimeGen.next()
-    for (const inter in scheduleByTime[t]) {
-      const greenStreet = scheduleByTime[t][inter]
+    const scheduleByTime = scheduleByTimeGen.next().value
+    console.log(scheduleByTime)
+    for (const inter in scheduleByTime) {
+      const greenStreet = scheduleByTime[inter]
       const carId = city[greenStreet].queue.pop()
       if (carId === undefined) continue
       const car = cars[carId]
@@ -75,7 +74,7 @@ const start = (input, schedule) => {
   console.log(score)
 
 
-  console.log('scheduleByTime', scheduleByTime)
+  // console.log('scheduleByTime', scheduleByTime)
 }
 
 const test = (TEST = 'a') => {
