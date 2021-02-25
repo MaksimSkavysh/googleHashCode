@@ -1,4 +1,5 @@
-const { parseInput, write } = require('./parser')
+
+const { parseInput, write, parseOutput } = require('./parser')
 
 
 
@@ -7,17 +8,34 @@ const { parseInput, write } = require('./parser')
 const TASK = 'a'
 
 
+const interTic = (inter) => {
+
+}
+
+
+const simulate = (data, inters) => {
+  for (let time = 0; time < data.TIME; time++) {
+    for (const inter of inters) {
+      const greenStreet = inter.schedule[inter.current][0]
+
+    }
+  }
+}
+
 
 const run = (TASK = 'a') => {
 
   const shedule = []
 
   const data = parseInput(TASK)
+
+  const out = parseOutput(TASK)
   const intersections = Array(data.intersections)
   for (let i = 0; i < data.intersections; i++) {
     intersections[i] = {
       cars: [],
-      inStreets: {}
+      inStreets: {},
+      schedule: out[i]
     }
   }
 
@@ -32,11 +50,16 @@ const run = (TASK = 'a') => {
     intersections[street.to].inStreets[street.name] = 1
   }
 
-  console.log(intersections)
 
   for (let i = 0; i < intersections.length; i++) {
-
+    intersections[i].current = 0
+    intersections[i].time = intersections[i].schedule[0][1]
   }
+  console.log(data)
+  console.log(intersections)
+  // console.log(out)
+
+  simulate(data, inter)
 
   write(TASK, intersections)
 }
@@ -47,8 +70,10 @@ const run = (TASK = 'a') => {
 const TASKS = ['a', 'b', 'c', 'd', 'e', 'f']
 
 
-for (const task of TASKS) {
+run()
 
-  run(task)
-
-}
+// for (const task of TASKS) {
+//
+//   run(task)
+//
+// }

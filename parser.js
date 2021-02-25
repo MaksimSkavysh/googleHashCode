@@ -67,7 +67,7 @@ const write = (name, shedule) => {
 
 
 const parseOutput = (filename) => {
-  const ril = createReader('./inputs/' + filename + '.txt')
+  const ril = createReader('./out/' + filename + '.txt')
   const [intersections] = ril()
   const schedule = {}
   for (let i = 0; i < intersections; i++) {
@@ -86,14 +86,15 @@ const parseOutput = (filename) => {
 module.exports = {
   parseInput,
   write,
+  parseOutput,
 }
 
 const test = () => {
   const input = parseInput('a')
   const { T } = input
   console.log(input)
-  const out = parseOutput('out_example');
-  console.log('out', out)
+  // const out = parseOutput('out_example');
+  // console.log('out', out)
 }
 
 test()
