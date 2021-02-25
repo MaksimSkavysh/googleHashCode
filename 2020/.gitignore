@@ -9,7 +9,7 @@ node_modules
 coverage
 
 # WebStorm
-.idea/
+../.idea/
 
 #VSCODE
 .vscode

@@ -1,4 +1,4 @@
-const { parseInput, parseOutput } = require('./parser.js')
+const { parseInput, parseOutput } = require('2020/nik/parser.js')
 
 
 const INPUTS = ['a_example', 'b_read_on', 'c_incunabula', 'd_tough_choices', 'e_so_many_books', 'f_libraries_of_the_world']

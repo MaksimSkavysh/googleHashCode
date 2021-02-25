@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const fs = require('fs');
-const { parseInput } = require('./parser.js')
-const store = require('./store.js')
+const { parseInput } = require('2020/nik/parser.js')
+const store = require('2020/nik/store.js')
 
 const INPUTS = ['a_example', 'b_read_on', 'c_incunabula', 'd_tough_choices', 'e_so_many_books', 'f_libraries_of_the_world']
 
